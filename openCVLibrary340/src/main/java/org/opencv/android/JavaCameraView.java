@@ -1,5 +1,6 @@
 package org.opencv.android;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 
 import org.opencv.BuildConfig;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -179,8 +181,9 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                     mFrameWidth = params.getPreviewSize().width;
                     mFrameHeight = params.getPreviewSize().height;
 
+                    //change to Math.max to full screen causes fps issues
                     if ((getLayoutParams().width == LayoutParams.MATCH_PARENT) && (getLayoutParams().height == LayoutParams.MATCH_PARENT))
-                        mScale = Math.min(((float)height)/mFrameHeight, ((float)width)/mFrameWidth);
+                        mScale = Math.max(((float)height)/mFrameHeight, ((float)width)/mFrameWidth);
                     else
                         mScale = 0;
 
@@ -213,6 +216,11 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
                     /* Finally we are ready to start the preview */
                     Log.d(TAG, "startPreview");
+
+                    //MY CODE
+//                    setDisplayOrientation(mCamera, 90);
+//                    mCamera.setPreviewDisplay(getHolder());
+
                     mCamera.startPreview();
                 }
                 else
@@ -225,6 +233,19 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
         return result;
     }
+
+
+    //MY METHOD
+    protected void setDisplayOrientation(android.hardware.Camera camera, int angle) {
+        Method downPolymorphic;
+        try {
+            downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", new Class[]{int.class});
+            if (downPolymorphic != null)
+                downPolymorphic.invoke(camera, new Object[]{angle});
+        } catch (Exception e1) {
+        }
+    }
+
 
     protected void releaseCamera() {
         synchronized (this) {
