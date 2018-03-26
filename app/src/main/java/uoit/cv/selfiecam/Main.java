@@ -109,7 +109,6 @@ public class Main extends AppCompatActivity implements snapshotFragment.OnListFr
         File file = new File(paths.get(item.id));
         boolean deleted = file.delete();
         DataContent.removeItem(item);
-        fileCount--;
 //        snapshotFragment.recycler.notifyDataSetChanged();
     }
 

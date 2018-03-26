@@ -145,7 +145,7 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         // If there are any faces found, draw a rectangle around it
         Rect[] facesArray = faces.toArray();
         for (int i = 0; i <facesArray.length; i++) {
-            if (timeout >= 50){
+            if (timeout >= 20){
                 onPictureTaken(inputImg);
                 timeout = 0;
 //                snapshotFragment.recycler.notifyDataSetChanged();
@@ -215,6 +215,8 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         if (item != null) {
             File file = new File(Main.paths.get(item.id));
             DataContent.removeItem(item);
+//            Main.paths.remove(item.id);
+//            Main.mySDCardImages.remove(item.id);
             boolean deleted = file.delete();
         }
     }
@@ -241,9 +243,9 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
                 Utils.matToBitmap(tmp, bmp);
             }
             catch (CvException e){Log.d("Exception",e.getMessage());}
-            Main.fileCount++;
-            DataContent.SnapshotItem new_item = new DataContent.SnapshotItem(Main.fileCount, bmp);
-            DataContent.addItem(new_item);
+            DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount, bmp);
+            DataContent.addItem(new_item, fileName);
+//            Main.fileCount++;
 
             this.runOnUiThread(new Runnable() {
                 @Override

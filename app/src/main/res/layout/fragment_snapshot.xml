@@ -10,5 +10,5 @@
         android:id="@+id/img_view"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/ic_image_black_24dp"/>
+        />
 </RelativeLayout>

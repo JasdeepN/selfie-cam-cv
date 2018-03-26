@@ -46,20 +46,22 @@ public class DataContent {
         Log.d("load", Main.fileCount + " files to load");
         // Add some sample items.
         for (int i = 0; i < Main.fileCount; i++) {
-            addItem(createSnapshotItem(i, Main.mySDCardImages.elementAt(i)));
+            addItem(createSnapshotItem(i, Main.mySDCardImages.elementAt(i)), Main.paths.get(i));
             Log.i("data", "added image");
         }
     }
 
-    public static void addItem(SnapshotItem item) {
+    public static void addItem(SnapshotItem item, String filename) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
+        Main.paths.put(item.id, filename);
+        Main.mySDCardImages.add(item.img);
     }
 
     public static void removeItem(SnapshotItem item) {
         ITEMS.remove(item);
         ITEM_MAP.remove(item);
-        Main.fileCount--;
+//        Main.fileCount--;
         snapshotFragment.recycler.notifyDataSetChanged();
     }
 
