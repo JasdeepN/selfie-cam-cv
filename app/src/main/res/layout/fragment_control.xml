@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#9000"
+    tools:context="uoit.cv.selfiecam.ControlFragment">
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:background="@color/buttonColourBG"
+        android:textColor="#FFAAAAAA"
+        android:textOff="Detect"
+        android:textOn="Off"/>
+
+    <ImageButton
+        android:id="@+id/shoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/buttonColourBG"
+        android:contentDescription="TODO"
+        android:paddingBottom="14dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="14dp"
+        android:src="@drawable/ic_photo_camera_black_24dp"/>
+
+    <ImageButton
+        android:id="@+id/gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/buttonColourBG"
+        android:contentDescription="TODO"
+        android:paddingBottom="14dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="14dp"
+        android:src="@drawable/ic_image_black_24dp"/>
+
+</RelativeLayout>

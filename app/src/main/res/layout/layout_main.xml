@@ -8,22 +8,5 @@
     tools:context="uoit.cv.selfiecam.Main"
     android:background="@android:color/darker_gray">
 
-    <!--<fragment-->
-        <!--android:id="@+id/fragment"-->
-        <!--android:name="uoit.cv.selfiecam.snapshotFragment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentEnd="true"/>-->
-
-    <!--<Button-->
-        <!--android:id="@+id/start_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:onClick="run"-->
-        <!--android:text="go"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"/>-->
-
-
 </RelativeLayout>
 

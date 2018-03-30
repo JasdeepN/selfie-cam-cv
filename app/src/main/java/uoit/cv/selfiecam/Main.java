@@ -1,36 +1,34 @@
 package uoit.cv.selfiecam;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
+
+import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
-import java.time.LocalDate;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import uoit.cv.selfiecam.data.DataContent;
 import uoit.cv.selfiecam.util.PermissionChecker;
 
 
-public class Main extends AppCompatActivity implements snapshotFragment.OnListFragmentInteractionListener {
+public class Main extends AppCompatActivity {
     static public Vector<Bitmap> mySDCardImages;
-    static public int fileCount;
     static public Hashtable<Integer, String> paths;
+    static public int fileCount;
     static protected File folder = new File(Environment.getExternalStorageDirectory() +
             File.separator + "selfie-cam");
+    static protected Boolean toggle = false;
+    static protected File mCascadeFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +38,55 @@ public class Main extends AppCompatActivity implements snapshotFragment.OnListFr
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        loadImages();
+        try {
+            // Copy the resource into a temp file so OpenCV can load it
+            InputStream is = getResources().openRawResource(R.raw.harr_smile);
+            File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
+            mCascadeFile = new File(cascadeDir, "lbpcascade_file.xml");
+            FileOutputStream os = new FileOutputStream(mCascadeFile);
+
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+
+            is.close();
+            os.close();
+
+        } catch (Exception e) {
+            Log.e("OpenCVActivity", "Error loading cascade", e);
+        }
+
     }
 
     @Override
     protected void onStart() {
         Intent cam = new Intent(this, Camera.class);
-        startActivityForResult(cam, 0);
+        mySDCardImages = new Vector<Bitmap>();
+        paths = new Hashtable<Integer, String>();
+        loadImages();
         super.onStart();
+        startActivity(cam);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            finish();
+        }
     }
 
     private boolean loadImages() {
-        Log.d("imageloader", "start");
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        Log.d("image_loader", "start");
         try {
-            mySDCardImages = new Vector<Bitmap>();
-            paths = new Hashtable<Integer, String>();
-
             fileCount = 0;
+            paths.clear();
+            mySDCardImages.clear();
 
             File sdDir = new File(folder + File.separator);
 //            sdDir.mkdir();
@@ -65,7 +95,7 @@ public class Main extends AppCompatActivity implements snapshotFragment.OnListFr
                 File[] sdDirFiles = sdDir.listFiles();
                 if (sdDirFiles.length > 0) {
                     for (File singleFile : sdDirFiles) {
-                        Bitmap bmap = BitmapFactory.decodeFile(singleFile.getAbsolutePath());
+                        Bitmap bmap = BitmapFactory.decodeFile(singleFile.getAbsolutePath(), options);
 
                         paths.put(fileCount, singleFile.getAbsolutePath());
 
@@ -78,39 +108,9 @@ public class Main extends AppCompatActivity implements snapshotFragment.OnListFr
         } catch (Exception ex) {
             Log.e("LoadImageFiles", ex.getMessage());
         }
-        Log.d("imageloader", "done");
-        DataContent.load();
+        Log.d("gallery", "done loading images");
+//        DataContent.load();
         return (fileCount > 0);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-//            loadImages();
-            finish();
-//            Log.d("result", "ok");
-//            mySDCardImages.removeAllElements();
-//            paths.clear();
-//            loadImages();
-//            snapshotFragment.recycler.notifyDataSetChanged();
-        }
-    }
-
-
-    public void run(View v) {
-        Intent cam = new Intent(this, Camera.class);
-        startActivityForResult(cam, 0);
-    }
-
-    @Override
-    public void onListFragmentInteraction(DataContent.SnapshotItem item) {
-        Log.d("main", "Fragment interaction");
-        Log.d("delete", item.id + "");
-        File file = new File(paths.get(item.id));
-        boolean deleted = file.delete();
-        DataContent.removeItem(item);
-//        snapshotFragment.recycler.notifyDataSetChanged();
-    }
-
 
 }

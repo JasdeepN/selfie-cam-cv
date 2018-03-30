@@ -24,12 +24,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -44,15 +48,20 @@ import uoit.cv.selfiecam.data.DataContent;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
 
-public class Camera extends Activity implements CvCameraViewListener2, snapshotFragment.OnListFragmentInteractionListener {
-    private CameraBridgeViewBase mOpenCvCameraView;
-    CascadeClassifier faceDetector;
-    CascadeClassifier smileDetector;
-    private Mat grayscaleImage;
-    private int absoluteFaceSize;
-    long timeout = 50;
+public class Camera extends Activity implements CvCameraViewListener2, snapshotFragment
+        .OnListFragmentInteractionListener, ControlFragment.controllerFragmentListener {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+    private CascadeClassifier feature_detector;
+    private CameraBridgeViewBase mOpenCvCameraView;
+    private Mat grayscaleImage;
+    private int imgX;
+    private int imgY;
+    private int absoluteFaceSize;
+    static Mat currentImg;
+    long timeout = 50;
+    int backButtonCount = 0;
+
+    public static SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd_HH-mm");
 
 
     @Override
@@ -60,40 +69,16 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Intent resultIntent = new Intent();
+//        Intent resultIntent = new Intent();
         // TODO Add extras or a data URI to this intent as appropriate.
-        resultIntent.putExtra("some_key", "String data");
-        setResult(Activity.RESULT_OK, resultIntent);
+//        resultIntent.putExtra("some_key", "String data");
     }
 
 
     private void run(){
-
-        try {
-            // Copy the resource into a temp file so OpenCV can load it
-            InputStream is = getResources().openRawResource(R.raw.harr_smile);
-            File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
-            File mCascadeFile = new File(cascadeDir, "lbpcascade_.xml");
-            FileOutputStream os = new FileOutputStream(mCascadeFile);
-
-
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-
-            is.close();
-            os.close();
-
-            faceDetector = new CascadeClassifier( mCascadeFile.getAbsolutePath() );
-            //must add this line
-            faceDetector.load( mCascadeFile.getAbsolutePath() );
-
-        } catch (Exception e) {
-            Log.e("OpenCVActivity", "Error loading cascade", e);
-        }
-
+        feature_detector = new CascadeClassifier( Main.mCascadeFile.getAbsolutePath() );
+        //must add this line
+        feature_detector.load( Main.mCascadeFile.getAbsolutePath() );
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.cam1);
         // front camera on tablet
         mOpenCvCameraView.setCameraIndex(1);
@@ -106,8 +91,10 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     @Override
     public void onPause() {
         super.onPause();
-        if (mOpenCvCameraView != null)
+        if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
+            DataContent.clearSnapshots();
+        }
     }
 
     public void onDestroy() {
@@ -119,9 +106,11 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     @Override
     public void onCameraViewStarted(int width, int height) {
         grayscaleImage = new Mat(height, width, CvType.CV_8UC4);
-
+        currentImg = new Mat(height,width, CvType.CV_8UC4);
         // The faces will be a 20% of the height of the screen
-        absoluteFaceSize = (int) (height * 0.2);
+        absoluteFaceSize = (int) (height * 0.07);
+        imgX = width;
+        imgY = height;
     }
 
 
@@ -131,36 +120,39 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 
         Mat inputImg = inputFrame.rgba();
-//        Imgproc.cvtColor(inputImg, grayscaleImage, Imgproc.COLOR_BGR2RGB);
-        //do frame claculations here
-        Imgproc.cvtColor(inputImg, grayscaleImage, Imgproc.COLOR_RGBA2RGB);
-
+//        Imgproc.cvtColor(inputImg, grayscaleImage, Imgproc.COLOR_BGR2GRAY);
+//        do frame claculations here
+        grayscaleImage = inputFrame.gray();
+//        Imgproc.cvtColor(inputImg, currentImg, Imgproc.COLOR_BGR2RGB);
+        currentImg = inputImg;
         MatOfRect faces = new MatOfRect();
-
-        if (faceDetector != null) {
-            faceDetector.detectMultiScale(grayscaleImage, faces, 1.1, 100, 2,
-                    new Size(100, 100), new Size());
-        }
-
-        // If there are any faces found, draw a rectangle around it
-        Rect[] facesArray = faces.toArray();
-        for (int i = 0; i <facesArray.length; i++) {
-            if (timeout >= 20){
-                onPictureTaken(inputImg);
-                timeout = 0;
-//                snapshotFragment.recycler.notifyDataSetChanged();
-
+        if (Main.toggle) {
+            if (feature_detector != null) {
+                feature_detector.detectMultiScale(grayscaleImage, faces, 1.1, 200, 2,
+                        new Size(100, 70), new Size());
             }
-            Imgproc.rectangle(inputImg, facesArray[i].tl(), facesArray[i].br(), new Scalar(0,
-                    255,
-                    0, 255), 3);
-        }
-        timeout++;
 
+            // If there are any faces found, draw a rectangle around it
+            Rect[] facesArray = faces.toArray();
+            for (int i = 0; i < facesArray.length; i++) {
+                if (timeout >= 20) {
+                    onPictureTaken();
+                    timeout = 0;
+                }
+                Imgproc.rectangle(inputImg, facesArray[i].tl(), facesArray[i].br(), new Scalar(0,
+                        255,
+                        0, 255), 3);
+            }
+            timeout++;
+        }
 
 //        Log.i("test", timeout+"");
 
         return inputImg;
+    }
+
+    public static Mat getCurrentFrame(){
+        return currentImg;
     }
 
     @Override
@@ -221,31 +213,29 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         }
     }
 
-    public void onPictureTaken(Mat data) {
+    public void onPictureTaken() {
 
     //Log.i(TAG, "Saving a bitmap to file");
     // The camera preview was automatically stopped. Start it again.
         // Write the image in a file (in jpeg format)
         try {
             String currentDateandTime = sdf.format(new Date());
-            String fileName = Main.folder+ "/sample_picture_" + currentDateandTime + ".jpeg";
+            String fileName = Main.folder+ "/selfie_" + currentDateandTime + ".jpg";
 //            Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
 //            String filename = "/storage/emulated/0/DCIM/Camera/samplepass.jpg";
-            Imgcodecs.imwrite(fileName,data);
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;
-            Mat tmp = new Mat (720, 1280, CvType.CV_8U, new Scalar(4));
             try {
-                //Imgproc.cvtColor(seedsImage, tmp, Imgproc.COLOR_RGB2BGRA);
-                Imgproc.cvtColor(data, tmp, Imgproc.COLOR_BGRA2RGBA, 4);
-                bmp = Bitmap.createBitmap(tmp.cols(), tmp.rows(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(tmp, bmp);
+                bmp = Bitmap.createBitmap(currentImg.cols(), currentImg.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(currentImg, bmp);
             }
             catch (CvException e){Log.d("Exception",e.getMessage());}
             DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount, bmp);
             DataContent.addItem(new_item, fileName);
-//            Main.fileCount++;
+            Imgproc.cvtColor(currentImg, currentImg, Imgproc.COLOR_BGR2RGB);
+
+            Imgcodecs.imwrite(fileName, currentImg);
 
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -261,8 +251,30 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         }
     }
 
+    /**
+     * Back button listener.
+     * Will close the application if the back button pressed twice.
+     */
+    @Override
+    public void onBackPressed()
+    {
+        if(backButtonCount >= 1)
+        {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, "Press the back button once again to close the application.", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
+    }
 
-
-
+    @Override
+    public void onControlFragmentInteraction(View uri) {
+        Log.d("controller", "clicked"+uri);
+    }
 }
 
