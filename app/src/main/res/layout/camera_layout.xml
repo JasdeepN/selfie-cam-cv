@@ -8,6 +8,7 @@
 
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/camera_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,9 +22,9 @@
 
         <fragment
             android:id="@+id/image_view"
-            android:name="uoit.cv.selfiecam.snapshotFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:name="uoit.cv.selfiecam.snapshotFragment"
             opencv:layout_constraintEnd_toEndOf="parent"/>
 
         <fragment
@@ -34,7 +35,7 @@
             android:layout_marginBottom="10dp"
             opencv:layout_constraintBottom_toBottomOf="@+id/cam1"
             opencv:layout_constraintLeft_toLeftOf="parent"
-            opencv:layout_constraintRight_toLeftOf="@+id/image_view"/>
+            />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -20,6 +20,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -72,6 +73,11 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
 //        Intent resultIntent = new Intent();
         // TODO Add extras or a data URI to this intent as appropriate.
 //        resultIntent.putExtra("some_key", "String data");
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
     }
 
 

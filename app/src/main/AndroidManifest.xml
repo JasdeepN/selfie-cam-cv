@@ -27,10 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Camera"
+        <activity
+            android:name=".Camera"
             android:screenOrientation="landscape"/>
-        <activity android:name=".Gallery"
-                  android:screenOrientation="landscape"/>
+        <activity
+            android:name=".Gallery"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".GalleryView">
+        </activity>
     </application>
 
 </manifest>

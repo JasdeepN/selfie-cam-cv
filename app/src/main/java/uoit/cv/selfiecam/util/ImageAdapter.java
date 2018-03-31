@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import org.opencv.features2d.BOWImgDescriptorExtractor;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +28,14 @@ import uoit.cv.selfiecam.data.DataContent;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private List<Bitmap> mThumbIds;
+    private Hashtable<Integer, String> mPaths;
 
 
     // Constructor
-    public ImageAdapter(Context c, List<Bitmap> data){
+    public ImageAdapter(Context c, List<Bitmap> data, Hashtable<Integer, String> paths){
         mContext = c;
         mThumbIds = data;
+        mPaths = paths;
     }
 
     @Override
@@ -57,4 +60,7 @@ public class ImageAdapter extends BaseAdapter {
 //        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(320, 160));
         return imageView;
-    }   }
+    }
+
+
+}
