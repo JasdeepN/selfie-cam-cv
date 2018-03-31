@@ -108,7 +108,7 @@ public class Main extends AppCompatActivity {
         } catch (Exception ex) {
             Log.e("LoadImageFiles", ex.getMessage());
         }
-        Log.d("gallery", "done loading images");
+        Log.d("Main", "done loading img thumbs");
 //        DataContent.load();
         return (fileCount > 0);
     }

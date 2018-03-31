@@ -91,7 +91,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Log.d("gallary", "clicked");
+                Log.d("gallery", "clicked");
                 Intent intent = new Intent(Custmv.getContext(), Gallery.class);
                 getActivity().finish();
                 startActivity(intent);
@@ -152,18 +152,9 @@ public class ControlFragment extends Fragment {
     }
 
     public void onTakePicture() {
-
-//        Imgproc.cvtColor(data, data, Imgproc.COLOR_BGR2RGB);
-
         Mat frame = Camera.getCurrentFrame();
-        //Log.i(TAG, "Saving a bitmap to file");
-        // The camera preview was automatically stopped. Start it again.
-        // Write the image in a file (in jpeg format)
         try {
-            String currentDateandTime = Camera.sdf.format(new Date());
-            String fileName = Main.folder+ "/snap_" + currentDateandTime + ".jpg";
-//            Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
-//            String filename = "/storage/emulated/0/DCIM/Camera/samplepass.jpg";
+            String fileName = Main.folder+ "/snap_" + Main.fileCount + ".jpg";
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;
@@ -172,12 +163,12 @@ public class ControlFragment extends Fragment {
                 Utils.matToBitmap(frame, bmp);
             }
             catch (CvException e){Log.d("Exception",e.getMessage());}
-            DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount, bmp);
+            DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount,
+                    bmp);
             DataContent.addItem(new_item, fileName);
             Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2RGB);
 
             Imgcodecs.imwrite(fileName, frame);
-//            Main.fileCount++;
 
              getActivity().runOnUiThread(new Runnable() {
                 @Override

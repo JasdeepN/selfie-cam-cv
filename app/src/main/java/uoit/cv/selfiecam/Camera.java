@@ -220,15 +220,9 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     }
 
     public void onPictureTaken() {
-
-    //Log.i(TAG, "Saving a bitmap to file");
-    // The camera preview was automatically stopped. Start it again.
-        // Write the image in a file (in jpeg format)
         try {
             String currentDateandTime = sdf.format(new Date());
-            String fileName = Main.folder+ "/selfie_" + currentDateandTime + ".jpg";
-//            Toast.makeText(this, fileName + " saved", Toast.LENGTH_SHORT).show();
-//            String filename = "/storage/emulated/0/DCIM/Camera/samplepass.jpg";
+            String fileName = Main.folder+ "/selfie_" + Main.fileCount + ".jpg";
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;

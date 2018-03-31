@@ -56,8 +56,9 @@ public class DataContent {
         ITEM_MAP.put(item.id, item);
         Main.paths.put(item.id, filename);
         Main.mySDCardImages.add(item.img);
-        Main.fileCount++;
 //        snapshotFragment.recycler.notifyDataSetChanged();
+        Log.d("ADD", Main.paths.toString());
+        Main.fileCount++;
 
     }
 
