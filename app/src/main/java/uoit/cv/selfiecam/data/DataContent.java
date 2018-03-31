@@ -11,6 +11,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,9 +66,12 @@ public class DataContent {
     public static void removeItem(SnapshotItem item) {
         ITEMS.remove(item);
         ITEM_MAP.remove(item);
-//        Main.fileCount--;
+        Main.paths.remove(item.getId());
+        Main.mySDCardImages.remove(item.getImg());
+        Main.fileCount--;
         snapshotFragment.recycler.notifyDataSetChanged();
     }
+
 
     public static void clearSnapshots(){
         ITEMS.clear();
@@ -76,8 +80,8 @@ public class DataContent {
     }
 
 
-    public static SnapshotItem createSnapshotItem(int position, Bitmap img) {
-        return new SnapshotItem(position, img);
+    public static SnapshotItem createSnapshotItem(int position, Bitmap img, String path) {
+        return new SnapshotItem(position, img, path);
     }
 
     private static String makeDetails(int position) {
@@ -95,6 +99,7 @@ public class DataContent {
     public static class SnapshotItem {
         public final int id;
         public Bitmap img;
+        public String path;
 
         public int getId() {
             return id;
@@ -104,9 +109,10 @@ public class DataContent {
             return img;
         }
 
-        public SnapshotItem(int id, Bitmap img) {
+        public SnapshotItem(int id, Bitmap img, String path) {
             this.id = id;
             this.img = img;
+            this.path = path;
         }
 
 

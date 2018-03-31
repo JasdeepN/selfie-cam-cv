@@ -6,4 +6,5 @@
     <string name="togglebutton">ToggleButton</string>
     <string name="image_name">Image Name:</string>
     <string name="image_dim">Image Dimensions:</string>
+    <string name="gallery_title">Gallery</string>
 </resources>

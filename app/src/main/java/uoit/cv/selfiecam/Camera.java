@@ -62,7 +62,7 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     long timeout = 50;
     int backButtonCount = 0;
 
-    public static SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd_HH-mm");
+    public static SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
 
 
     @Override
@@ -70,9 +70,11 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        Intent resultIntent = new Intent();
-        // TODO Add extras or a data URI to this intent as appropriate.
-//        resultIntent.putExtra("some_key", "String data");
+        // Intent resultIntent = new Intent();
+        // TODO Add extras or a data URI to this intent as appropriate
+        // resultIntent.putExtra("some_key", "String data");
+        Toast.makeText(this, "Tap Detect to begin.", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -222,7 +224,7 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     public void onPictureTaken() {
         try {
             String currentDateandTime = sdf.format(new Date());
-            String fileName = Main.folder+ "/selfie_" + Main.fileCount + ".jpg";
+            String fileName = Main.folder+ "/selfie_" + currentDateandTime + ".jpg";
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;
@@ -231,7 +233,8 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
                 Utils.matToBitmap(currentImg, bmp);
             }
             catch (CvException e){Log.d("Exception",e.getMessage());}
-            DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount, bmp);
+            DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount,
+                    bmp, fileName);
             DataContent.addItem(new_item, fileName);
             Imgproc.cvtColor(currentImg, currentImg, Imgproc.COLOR_BGR2RGB);
 

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:opencv="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:id="@+id/relativeLayout"
-                                             android:layout_width="fill_parent"
-                                             android:layout_height="fill_parent">
-
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/camera_frame"
@@ -22,10 +21,14 @@
 
         <fragment
             android:id="@+id/image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:name="uoit.cv.selfiecam.snapshotFragment"
-            opencv:layout_constraintEnd_toEndOf="parent"/>
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            opencv:layout_constraintBottom_toTopOf="@+id/controller"
+            opencv:layout_constraintEnd_toEndOf="parent"
+            opencv:layout_constraintTop_toTopOf="@+id/cam1"/>
 
         <fragment
             android:id="@+id/controller"

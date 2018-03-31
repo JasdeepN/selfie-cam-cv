@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryBg"
     tools:context="uoit.cv.selfiecam.GalleryView">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
 
     <LinearLayout
         android:id="@+id/img_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <ImageButton
             android:id="@+id/back_button"
@@ -21,10 +35,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="false"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="-25dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="10dp"
+            android:background="@color/colorPrimaryBg"
             app:srcCompat="@drawable/ic_arrow_back_black_24dp"/>
 
         <ImageView
@@ -34,7 +47,7 @@
             android:layout_centerInParent="false"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0"
             app:srcCompat="@drawable/ic_image_black_24dp"/>
 
         <ImageButton
@@ -42,10 +55,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentTop="false"
-            android:layout_marginLeft="-25dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryBg"
             app:srcCompat="@drawable/ic_arrow_forward_black_24dp"/>
 
     </LinearLayout>
@@ -57,7 +70,8 @@
         android:layout_below="@+id/img_view"
         android:layout_marginLeft="10dp"
         android:padding="5dp"
-        android:text="@string/image_name"/>
+        android:text="@string/image_name"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/image_name"
@@ -66,7 +80,8 @@
         android:layout_below="@+id/img_view"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/image_name_tag"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/image_dim_tag"
@@ -75,7 +90,8 @@
         android:layout_below="@+id/image_name_tag"
         android:layout_marginLeft="10dp"
         android:padding="5dp"
-        android:text="@string/image_dim"/>
+        android:text="@string/image_dim"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/image_dim"
@@ -84,5 +100,6 @@
         android:layout_below="@+id/image_name"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/image_dim_tag"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        android:textColor="@color/colorAccent"/>
 </RelativeLayout>

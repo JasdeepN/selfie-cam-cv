@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import uoit.cv.selfiecam.util.ImageAdapter;
 import uoit.cv.selfiecam.util.PermissionChecker;
 
 
@@ -29,12 +30,19 @@ public class Main extends AppCompatActivity {
             File.separator + "selfie-cam");
     static protected Boolean toggle = false;
     static protected File mCascadeFile;
+    public static ImageAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_main);
         new PermissionChecker(getBaseContext(), this).getPermissions();
+        setContentView(R.layout.layout_main);
+        mySDCardImages = new Vector<Bitmap>();
+        paths = new Hashtable<Integer, String>();
+        adapter = new ImageAdapter(this, mySDCardImages, paths);
+        loadImages();
+
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -64,9 +72,6 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onStart() {
         Intent cam = new Intent(this, Camera.class);
-        mySDCardImages = new Vector<Bitmap>();
-        paths = new Hashtable<Integer, String>();
-        loadImages();
         super.onStart();
         startActivity(cam);
     }
@@ -79,7 +84,7 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private boolean loadImages() {
+    public static boolean loadImages() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
         Log.d("image_loader", "start");
@@ -110,6 +115,7 @@ public class Main extends AppCompatActivity {
         }
         Log.d("Main", "done loading img thumbs");
 //        DataContent.load();
+        adapter.notifyDataSetChanged();
         return (fileCount > 0);
     }
 

@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -23,6 +24,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import uoit.cv.selfiecam.data.DataContent;
@@ -44,6 +46,9 @@ public class ControlFragment extends Fragment {
     private ToggleButton toggle;
     private ImageButton snapshot;
     private ImageButton gallery;
+
+    public static SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
+
 
     public ControlFragment() {
         // Required empty public constructor
@@ -92,9 +97,13 @@ public class ControlFragment extends Fragment {
             public void onClick(View v)
             {
                 Log.d("gallery", "clicked");
-                Intent intent = new Intent(Custmv.getContext(), Gallery.class);
-                getActivity().finish();
-                startActivity(intent);
+                if (Main.paths.size() > 0) {
+                    Intent intent = new Intent(Custmv.getContext(), Gallery.class);
+                    getActivity().finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Take a picture first.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -154,7 +163,8 @@ public class ControlFragment extends Fragment {
     public void onTakePicture() {
         Mat frame = Camera.getCurrentFrame();
         try {
-            String fileName = Main.folder+ "/snap_" + Main.fileCount + ".jpg";
+            String currentDateandTime = sdf.format(new Date());
+            String fileName = Main.folder+ "/selfie_" + currentDateandTime + ".jpg";
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;
@@ -164,7 +174,7 @@ public class ControlFragment extends Fragment {
             }
             catch (CvException e){Log.d("Exception",e.getMessage());}
             DataContent.SnapshotItem new_item = DataContent.createSnapshotItem(Main.fileCount,
-                    bmp);
+                    bmp,fileName);
             DataContent.addItem(new_item, fileName);
             Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2RGB);
 
