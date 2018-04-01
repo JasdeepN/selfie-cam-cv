@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,14 +34,22 @@ public class GalleryView extends AppCompatActivity {
     private ImageButton back;
     private ImageButton next;
     private int total_imgs;
+    private int reqCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
+        setResult(1);
         path = extras.getString("path to jpeg");
         count = extras.getInt("grid position");
         total_imgs = extras.getInt("total imgs");
+
+        if (total_imgs <= 0){
+            finish();
+        }
+
+        reqCode = extras.getInt("requestCode");
 
         Log.d("gallery view", "total images " + total_imgs);
         setContentView(R.layout.gallery_view);
@@ -54,11 +64,29 @@ public class GalleryView extends AppCompatActivity {
         back = findViewById(R.id.back_button);
         next = findViewById(R.id.next_button);
 
-        loadImage(path);
+        if (reqCode == 1001){
+            back.setEnabled(false);
+            next.setEnabled(false);
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
 
-        im.setImageBitmap(bmap);
-        name.setText(path);
-        dim.setText(bmap.getWidth() + "x" + bmap.getHeight());
+            bmap = Camera.current_item.getImg();
+
+            im.setImageBitmap(bmap);
+            name.setText(path);
+            dim.setText(bmap.getWidth() + "x" + bmap.getHeight());
+
+        } else {
+            loadImage(path);
+            if (bmap != null) {
+                im.setImageBitmap(bmap);
+                name.setText(path);
+                dim.setText(bmap.getWidth() + "x" + bmap.getHeight());
+            }
+        }
+
+
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +149,16 @@ public class GalleryView extends AppCompatActivity {
             // do something here
             Log.d("menu", "clicked");
             delete(path);
-//            im.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_camera_black_24dp));
+
+//
+//            this.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    snapshotFragment.recycler.notifyDataSetChanged();
+//                }
+//            });
+
+//            im.setImageDrawable(getResources().getDrawable(R.drawable.camera_24dp));
 //            dim.setText("deleted");
 //            name.setText("deleted");
 
@@ -132,17 +169,15 @@ public class GalleryView extends AppCompatActivity {
     public void delete(String path) {
         File file = new File(path);
         boolean deleted = file.delete();
-        Main.paths.clear();
-        Main.mySDCardImages.clear();
-        Main.loadImages();
+        if (reqCode == 1001) {
+            DataContent.removeItem(Camera.current_item);
+        } else {
+            Main.paths.clear();
+            Main.mySDCardImages.clear();
+            Main.loadImages();
+        }
         setResult(Gallery.DELETE);
         finish();
-//        if (Main.fileCount == 0){
-//            im.setImageDrawable(getResources().getDrawable(R.drawable.ic_image_black_256dp));
-//            finish();
-//        } else if (Main.fileCount > 0){
-//            back();
-//        }
     }
 
     private void loadImage(String path) {

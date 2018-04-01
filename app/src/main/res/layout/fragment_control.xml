@@ -16,10 +16,10 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        android:background="@color/buttonColourBG"
         android:textColor="#FFAAAAAA"
+        android:background="@drawable/button_style"
         android:textOff="Detect"
-        android:textOn="Off"/>
+        android:textOn="Detecting"/>
 
     <ImageButton
         android:id="@+id/shoot"
@@ -27,13 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@color/buttonColourBG"
+        android:background="@drawable/button_style"
         android:contentDescription="TODO"
         android:paddingBottom="14dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="14dp"
-        android:src="@drawable/ic_photo_camera_black_24dp"/>
+        android:src="@drawable/camera_24dp"/>
 
     <ImageButton
         android:id="@+id/gallery"
@@ -43,13 +43,13 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
-        android:background="@color/buttonColourBG"
         android:contentDescription="TODO"
+        android:background="@drawable/button_style"
         android:paddingBottom="14dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="14dp"
-        android:src="@drawable/ic_photo_library_black_24dp"/>
+        android:src="@drawable/photo_library_24dp"/>
 
     <ImageButton
         android:id="@+id/info_button"
@@ -58,8 +58,7 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="40dp"
         android:layout_toStartOf="@+id/gallery"
-        android:background="?android:selectableItemBackground"
-        android:padding="12dp"
-        android:src="@drawable/ic_info_outline_black_24dp"/>
+        android:background="@drawable/info_button_style"
+        android:padding="15dp"/>
 
 </RelativeLayout>

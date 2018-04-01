@@ -11,6 +11,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import uoit.cv.selfiecam.data.DataContent;
+
 import static uoit.cv.selfiecam.Main.mySDCardImages;
 import static uoit.cv.selfiecam.Main.paths;
 
@@ -23,17 +25,18 @@ public class Gallery extends AppCompatActivity implements AdapterView.OnItemClic
         setContentView(R.layout.gallery_layout);
 //        ListView listView = (ListView) findViewById(R.id.list);
         GridView gridView = (GridView) findViewById(R.id.grid_view);
-
+        Main.loadImages();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("gallery", "clicked on item " + position);
-
+                Camera.current_item = DataContent.ITEM_MAP.get(position);
                 Intent intent = new Intent(getBaseContext(), GalleryView.class);
                 intent.putExtra("path to jpeg", paths.get(position));
                 intent.putExtra("grid position", position);
                 intent.putExtra("total imgs", mySDCardImages.size());
+                intent.putExtra("requestCode", 1002);
 
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 1002);
             }
         });
 
@@ -52,6 +55,7 @@ public class Gallery extends AppCompatActivity implements AdapterView.OnItemClic
     @Override
     public void onBackPressed() {
 //        Intent intent = new Intent(getApplicationContext(), Camera.class);
+        DataContent.clearSnapshots();
         finish();
     }
 

@@ -11,7 +11,12 @@
     <string name="name_tag">Jasdeep Nijjar</string>
     <string name="class_tag">Computer Vision CSCI-4220U (Winter 2018)</string>
     <string name="school_tag">University of Ontario Institute of Technology</string>
-    <string name="instructions">need to put instructions</string>
+    <string name="instructions">Press detect to enable Haar cascade smile detector and the app
+        will take pictures if it sees a smile; there is a 5 second timeout before the next image
+        is saved. Clicking on the snapshots on the right side show gallery view with delete
+        button. Full gallery button includes image switcher. Saves imaages taken to selfie-cam
+        folder.
+    </string>
     <string name="reference">Using OpenCV 3</string>
 
 </resources>

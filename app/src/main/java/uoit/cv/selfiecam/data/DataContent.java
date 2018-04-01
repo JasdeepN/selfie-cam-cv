@@ -64,11 +64,13 @@ public class DataContent {
     }
 
     public static void removeItem(SnapshotItem item) {
+        Log.d("remove", item+"");
         ITEMS.remove(item);
         ITEM_MAP.remove(item);
         Main.paths.remove(item.getId());
         Main.mySDCardImages.remove(item.getImg());
-        Main.fileCount--;
+//        Main.loadImages();
+//        Main.fileCount--;
         snapshotFragment.recycler.notifyDataSetChanged();
     }
 

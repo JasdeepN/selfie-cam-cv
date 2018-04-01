@@ -3,6 +3,7 @@ package uoit.cv.selfiecam;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -48,7 +49,7 @@ public class ControlFragment extends Fragment {
     private ImageButton gallery;
     private ImageButton info;
 
-    public static SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
+    public static SimpleDateFormat sdf = new SimpleDateFormat("YY-MM-dd-HH-mm-ss");
 
 
     public ControlFragment() {
@@ -119,6 +120,7 @@ public class ControlFragment extends Fragment {
                 }
             }
         });
+
 
         snapshot.setOnClickListener(new View.OnClickListener()
         {
