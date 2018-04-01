@@ -85,9 +85,6 @@ public class GalleryView extends AppCompatActivity {
             }
         }
 
-
-
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,9 +105,11 @@ public class GalleryView extends AppCompatActivity {
     }
 
     private void back() {
-        if (count-- < 0) {
-            count = Main.paths.size();
+        count--;
+        if (count <= -1) {
+            count = total_imgs-1;
         }
+        Log.d("count", count+"");
         String path = Main.paths.get(count);
         loadImage(path);
 
@@ -121,7 +120,8 @@ public class GalleryView extends AppCompatActivity {
     }
 
     private void next() {
-        if (count++ >= total_imgs - 1) {
+        count++;
+        if (count >= total_imgs - 1) {
             count = 0;
         }
         String path = Main.paths.get(count);
