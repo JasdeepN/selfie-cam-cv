@@ -46,6 +46,7 @@ public class ControlFragment extends Fragment {
     private ToggleButton toggle;
     private ImageButton snapshot;
     private ImageButton gallery;
+    private ImageButton info;
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
 
@@ -80,6 +81,7 @@ public class ControlFragment extends Fragment {
         this.snapshot = (ImageButton) Custmv.findViewById(R.id.shoot);
         this.gallery = (ImageButton) Custmv.findViewById(R.id.gallery);
         this.toggle = (ToggleButton) Custmv.findViewById(R.id.toggleButton);
+        this.info = (ImageButton) Custmv.findViewById(R.id.info_button);
 
         toggle.setOnClickListener(new View.OnClickListener()
         {
@@ -88,6 +90,17 @@ public class ControlFragment extends Fragment {
             {
                 Log.d("toggle", "clicked");
                 Main.toggle = !Main.toggle;
+            }
+        });
+
+        info.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(Custmv.getContext(), About.class);
+                getActivity().finish();
+                startActivity(intent);
             }
         });
 

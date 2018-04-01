@@ -80,7 +80,8 @@
         android:layout_below="@+id/img_view"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/image_name_tag"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:textColor="@color/colorAccent"/>
 
     <TextView
@@ -100,6 +101,7 @@
         android:layout_below="@+id/image_name"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/image_dim_tag"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:textColor="@color/colorAccent"/>
 </RelativeLayout>

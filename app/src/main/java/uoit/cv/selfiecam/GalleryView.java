@@ -36,7 +36,6 @@ public class GalleryView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setResult(Activity.RESULT_OK);
         Bundle extras = getIntent().getExtras();
         path = extras.getString("path to jpeg");
         count = extras.getInt("grid position");
@@ -64,15 +63,16 @@ public class GalleryView extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (total_imgs <= 2) {
+                if (total_imgs >= 2) {
                     next();
                 }
             }
         });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (total_imgs <= 2) {
+                if (total_imgs >= 2) {
                     back();
                 }
             }
@@ -80,11 +80,9 @@ public class GalleryView extends AppCompatActivity {
     }
 
     private void back() {
-        count--;
-        if (count < 0) {
+        if (count-- < 0) {
             count = Main.paths.size();
         }
-        Log.d("back", "" + count);
         String path = Main.paths.get(count);
         loadImage(path);
 

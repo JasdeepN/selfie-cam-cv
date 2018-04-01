@@ -7,4 +7,11 @@
     <string name="image_name">Image Name:</string>
     <string name="image_dim">Image Dimensions:</string>
     <string name="gallery_title">Gallery</string>
+    <string name="info_tag">About</string>
+    <string name="name_tag">Jasdeep Nijjar</string>
+    <string name="class_tag">Computer Vision CSCI-4220U (Winter 2018)</string>
+    <string name="school_tag">University of Ontario Institute of Technology</string>
+    <string name="instructions">need to put instructions</string>
+    <string name="reference">Using OpenCV 3</string>
+
 </resources>

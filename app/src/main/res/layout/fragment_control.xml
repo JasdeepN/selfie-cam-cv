@@ -49,6 +49,17 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="14dp"
-        android:src="@drawable/ic_image_black_24dp"/>
+        android:src="@drawable/ic_photo_library_black_24dp"/>
+
+    <ImageButton
+        android:id="@+id/info_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="40dp"
+        android:layout_toStartOf="@+id/gallery"
+        android:background="?android:selectableItemBackground"
+        android:padding="12dp"
+        android:src="@drawable/ic_info_outline_black_24dp"/>
 
 </RelativeLayout>
