@@ -2,6 +2,7 @@ package uoit.cv.selfiecam;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class About extends AppCompatActivity {
 

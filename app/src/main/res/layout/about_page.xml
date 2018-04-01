@@ -81,13 +81,41 @@
         android:textSize="14sp"/>
 
     <TextView
-        android:id="@+id/reference"
+        android:id="@+id/logo_ref"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/instructions"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="@string/icon_ref"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/logo_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_ref"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="@string/icon_link"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/reference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_link"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
         android:text="@string/reference"
         android:textColor="@color/colorAccent"
         android:textSize="14sp"/>

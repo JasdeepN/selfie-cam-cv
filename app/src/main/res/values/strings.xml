@@ -18,5 +18,6 @@
         folder.
     </string>
     <string name="reference">Using OpenCV 3</string>
-
+    <string name="icon_ref">Icon made by Bogdan Rosu from https://www.flaticon.com/</string>
+    <string name="icon_link">https://www.flaticon.com/authors/bogdan-rosu</string>
 </resources>
