@@ -45,9 +45,6 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     private CascadeClassifier feature_detector;
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat grayscaleImage;
-    private int imgX;
-    private int imgY;
-    private int absoluteFaceSize;
     static Mat currentImg;
     int backButtonCount = 0;
     private CountDownTimer timer;
@@ -115,10 +112,6 @@ public class Camera extends Activity implements CvCameraViewListener2, snapshotF
     public void onCameraViewStarted(int width, int height) {
         grayscaleImage = new Mat(height, width, CvType.CV_8UC4);
         currentImg = new Mat(height,width, CvType.CV_8UC4);
-        // The faces will be a 20% of the height of the screen
-        absoluteFaceSize = (int) (height * 0.07);
-        imgX = width;
-        imgY = height;
     }
 
 

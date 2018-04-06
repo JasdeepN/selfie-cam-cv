@@ -179,7 +179,7 @@ public class ControlFragment extends Fragment {
         Mat frame = Camera.getCurrentFrame();
         try {
             String currentDateandTime = sdf.format(new Date());
-            String fileName = Main.folder+ "/selfie_" + currentDateandTime + ".jpg";
+            String fileName = Main.folder+ "/snap_" + currentDateandTime + ".jpg";
 
             Log.d("save", fileName+" image saved");
             Bitmap bmp = null;
